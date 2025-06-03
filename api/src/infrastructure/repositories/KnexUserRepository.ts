@@ -3,7 +3,7 @@ import { UserRepository } from '../../domain/repositories/UserRepository';
 import { knexConn } from '../../config/db/connections';
 
 export const KnexUserRepository: UserRepository = {
-    async findAll(): Promise<User[]> {
+    async getAll(): Promise<User[]> {
         try {
             const rows = await knexConn('users').select(
                 'id',
@@ -21,15 +21,13 @@ export const KnexUserRepository: UserRepository = {
             }));
         } catch (err) {
             console.error('Error fetching users:', err);
-            throw err;
+            return [];
         }
     },
-
-    async findById(id: number): Promise<User | null> {
+    async getById(id: string): Promise<User | null> {
         try {
             const row = await knexConn('users').where({ id }).first();
             if (row.length === 0) {
-                return null;
             }
             return row
                 ? {
@@ -42,7 +40,16 @@ export const KnexUserRepository: UserRepository = {
                 : null;
         } catch (err) {
             console.error('Error fetching user by ID:', err);
-            throw err;
+            return null;
         }
+    },
+    create: function (): Promise<User | null> {
+        throw new Error('Function not implemented.');
+    },
+    update: function (): Promise<User | null> {
+        throw new Error('Function not implemented.');
+    },
+    delete: function (): Promise<null> {
+        throw new Error('Function not implemented.');
     },
 };
